@@ -1,0 +1,10 @@
+ERROR(Unknown character '[') line 1
+ERROR(Unknown character ']') line 1
+ERROR(Unknown character '%') line 1
+ERROR(Unknown character '$') line 1
+ERROR(Unknown character '^') line 1
+ERROR(Unknown character '@') line 1
+IDENTIFIER(y)
+ASSIGN
+ERROR(Unclosed string) line 3
+ERROR(Comment not closed) line 6

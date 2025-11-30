@@ -1,0 +1,11 @@
+STRING(hello)
+STRING(this is a test)
+STRING(hi \"ali\")
+STRING(c:\\folder\\file)
+STRING(\")
+IDENTIFIER(while2)
+ASSIGN
+IDENTIFIER(x)
+PLUS
+NUMBER(5)
+SEMICOLON
