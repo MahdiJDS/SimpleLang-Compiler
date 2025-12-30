@@ -12,19 +12,36 @@ static const char *KEYWORD_LIST[] = {
 /*  انواع توکن‌ها */
 typedef enum
 {
-    TOK_IF, TOK_ELSE, TOK_WHILE, TOK_RETURN,
-    TOK_IDENTIFIER, TOK_NUMBER, TOK_STRING,
+    TOK_IF,
+    TOK_ELSE,
+    TOK_WHILE,
+    TOK_RETURN,
+    TOK_IDENTIFIER,
+    TOK_NUMBER,
+    TOK_STRING,
 
-    TOK_PLUS, TOK_MINUS, TOK_MULTIPLY, TOK_DIVIDE,
+    TOK_PLUS,
+    TOK_MINUS,
+    TOK_MULTIPLY,
+    TOK_DIVIDE,
 
-    TOK_ASSIGN, TOK_EQUAL, TOK_NOT_EQUAL,
-    TOK_LESS_EQUAL, TOK_GREATER_EQUAL,
-    TOK_LESS, TOK_GREATER,
+    TOK_ASSIGN,
+    TOK_EQUAL,
+    TOK_NOT_EQUAL,
+    TOK_LESS_EQUAL,
+    TOK_GREATER_EQUAL,
+    TOK_LESS,
+    TOK_GREATER,
 
-    TOK_LPAREN, TOK_RPAREN, TOK_LBRACE, TOK_RBRACE,
-    TOK_SEMICOLON, TOK_COMMA,
+    TOK_LPAREN,
+    TOK_RPAREN,
+    TOK_LBRACE,
+    TOK_RBRACE,
+    TOK_SEMICOLON,
+    TOK_COMMA,
 
-    TOK_FINISHED, TOK_ERROR
+    TOK_FINISHED,
+    TOK_ERROR
 } TokenType;
 
 /*  ساختار توکن */
@@ -48,8 +65,10 @@ static Token makeToken(TokenType type, const char *txt)
 {
     Token t;
     t.type = type;
-    if (txt) strncpy(t.text, txt, MAX_BUFFER);
-    else t.text[0] = '\0';
+    if (txt)
+        strncpy(t.text, txt, MAX_BUFFER);
+    else
+        t.text[0] = '\0';
     t.line = currentLine;
     return t;
 }
@@ -66,41 +85,90 @@ static void printToken(Token t)
 {
     switch (t.type)
     {
-    case TOK_IF: fprintf(outputFile, "IF\n"); break;
-    case TOK_ELSE: fprintf(outputFile, "ELSE\n"); break;
-    case TOK_WHILE: fprintf(outputFile, "WHILE\n"); break;
-    case TOK_RETURN: fprintf(outputFile, "RETURN\n"); break;
+    case TOK_IF:
+        fprintf(outputFile, "IF\n");
+        break;
+    case TOK_ELSE:
+        fprintf(outputFile, "ELSE\n");
+        break;
+    case TOK_WHILE:
+        fprintf(outputFile, "WHILE\n");
+        break;
+    case TOK_RETURN:
+        fprintf(outputFile, "RETURN\n");
+        break;
 
-    case TOK_IDENTIFIER: fprintf(outputFile, "IDENTIFIER(%s)\n", t.text); break;
-    case TOK_NUMBER: fprintf(outputFile, "NUMBER(%s)\n", t.text); break;
-    case TOK_STRING: fprintf(outputFile, "STRING(%s)\n", t.text); break;
+    case TOK_IDENTIFIER:
+        fprintf(outputFile, "IDENTIFIER(%s)\n", t.text);
+        break;
+    case TOK_NUMBER:
+        fprintf(outputFile, "NUMBER(%s)\n", t.text);
+        break;
+    case TOK_STRING:
+        fprintf(outputFile, "STRING(%s)\n", t.text);
+        break;
 
-    case TOK_PLUS: fprintf(outputFile, "PLUS\n"); break;
-    case TOK_MINUS: fprintf(outputFile, "MINUS\n"); break;
-    case TOK_MULTIPLY: fprintf(outputFile, "MUL\n"); break;
-    case TOK_DIVIDE: fprintf(outputFile, "DIV\n"); break;
+    case TOK_PLUS:
+        fprintf(outputFile, "PLUS\n");
+        break;
+    case TOK_MINUS:
+        fprintf(outputFile, "MINUS\n");
+        break;
+    case TOK_MULTIPLY:
+        fprintf(outputFile, "MUL\n");
+        break;
+    case TOK_DIVIDE:
+        fprintf(outputFile, "DIV\n");
+        break;
 
-    case TOK_ASSIGN: fprintf(outputFile, "ASSIGN\n"); break;
-    case TOK_EQUAL: fprintf(outputFile, "EQ\n"); break;
-    case TOK_NOT_EQUAL: fprintf(outputFile, "NEQ\n"); break;
+    case TOK_ASSIGN:
+        fprintf(outputFile, "ASSIGN\n");
+        break;
+    case TOK_EQUAL:
+        fprintf(outputFile, "EQ\n");
+        break;
+    case TOK_NOT_EQUAL:
+        fprintf(outputFile, "NEQ\n");
+        break;
 
-    case TOK_LESS_EQUAL: fprintf(outputFile, "LEQ\n"); break;
-    case TOK_GREATER_EQUAL: fprintf(outputFile, "GEQ\n"); break;
-    case TOK_LESS: fprintf(outputFile, "LT\n"); break;
-    case TOK_GREATER: fprintf(outputFile, "GT\n"); break;
+    case TOK_LESS_EQUAL:
+        fprintf(outputFile, "LEQ\n");
+        break;
+    case TOK_GREATER_EQUAL:
+        fprintf(outputFile, "GEQ\n");
+        break;
+    case TOK_LESS:
+        fprintf(outputFile, "LT\n");
+        break;
+    case TOK_GREATER:
+        fprintf(outputFile, "GT\n");
+        break;
 
-    case TOK_LPAREN: fprintf(outputFile, "LPAREN\n"); break;
-    case TOK_RPAREN: fprintf(outputFile, "RPAREN\n"); break;
-    case TOK_LBRACE: fprintf(outputFile, "LBRACE\n"); break;
-    case TOK_RBRACE: fprintf(outputFile, "RBRACE\n"); break;
-    case TOK_SEMICOLON: fprintf(outputFile, "SEMICOLON\n"); break;
-    case TOK_COMMA: fprintf(outputFile, "COMMA\n"); break;
+    case TOK_LPAREN:
+        fprintf(outputFile, "LPAREN\n");
+        break;
+    case TOK_RPAREN:
+        fprintf(outputFile, "RPAREN\n");
+        break;
+    case TOK_LBRACE:
+        fprintf(outputFile, "LBRACE\n");
+        break;
+    case TOK_RBRACE:
+        fprintf(outputFile, "RBRACE\n");
+        break;
+    case TOK_SEMICOLON:
+        fprintf(outputFile, "SEMICOLON\n");
+        break;
+    case TOK_COMMA:
+        fprintf(outputFile, "COMMA\n");
+        break;
 
     case TOK_ERROR:
         fprintf(outputFile, "ERROR(%s) line %d\n", t.text, t.line);
         break;
 
-    default: break;
+    default:
+        break;
     }
 }
 
@@ -109,7 +177,8 @@ static void skipWhitespace()
 {
     while (isspace(currentChar))
     {
-        if (currentChar == '\n') currentLine++;
+        if (currentChar == '\n')
+            currentLine++;
         readNextChar();
     }
 }
@@ -120,8 +189,10 @@ static int skipBlockComment()
     readNextChar();
     while (1)
     {
-        if (currentChar == EOF) return 0;
-        if (currentChar == '\n') currentLine++;
+        if (currentChar == EOF)
+            return 0;
+        if (currentChar == '\n')
+            currentLine++;
 
         if (currentChar == '*')
         {
@@ -132,14 +203,14 @@ static int skipBlockComment()
                 return 1;
             }
         }
-        else readNextChar();
+        else
+            readNextChar();
     }
 }
 
 //   توابع ساخت توکن‌ها
 
-
-//متغییر
+// متغییر
 static Token readIdentifierToken()
 {
     char buf[MAX_BUFFER] = {0};
@@ -153,17 +224,20 @@ static Token readIdentifierToken()
 
     if (isKeyword(buf))
     {
-        if (strcmp(buf, "if") == 0) return makeToken(TOK_IF, NULL);
-        if (strcmp(buf, "else") == 0) return makeToken(TOK_ELSE, NULL);
-        if (strcmp(buf, "while") == 0) return makeToken(TOK_WHILE, NULL);
-        if (strcmp(buf, "return") == 0) return makeToken(TOK_RETURN, NULL);
+        if (strcmp(buf, "if") == 0)
+            return makeToken(TOK_IF, NULL);
+        if (strcmp(buf, "else") == 0)
+            return makeToken(TOK_ELSE, NULL);
+        if (strcmp(buf, "while") == 0)
+            return makeToken(TOK_WHILE, NULL);
+        if (strcmp(buf, "return") == 0)
+            return makeToken(TOK_RETURN, NULL);
     }
 
     return makeToken(TOK_IDENTIFIER, buf);
 }
 
-
-//عدد
+// عدد
 static Token readNumberToken()
 {
     char buf[MAX_BUFFER] = {0};
@@ -177,8 +251,7 @@ static Token readNumberToken()
     return makeToken(TOK_NUMBER, buf);
 }
 
-
-//رشته
+// رشته
 static Token readStringToken()
 {
     char buf[MAX_BUFFER] = {0};
@@ -218,22 +291,24 @@ static Token readStringToken()
     }
 }
 
-
-//عملگر ها
+// عملگر ها
 static Token readOperatorToken(int c)
 {
     switch (c)
     {
-    case '+': return makeToken(TOK_PLUS, NULL);
-    case '-': return makeToken(TOK_MINUS, NULL);
-    case '*': return makeToken(TOK_MULTIPLY, NULL);
+    case '+':
+        return makeToken(TOK_PLUS, NULL);
+    case '-':
+        return makeToken(TOK_MINUS, NULL);
+    case '*':
+        return makeToken(TOK_MULTIPLY, NULL);
 
     case '/':
         if (currentChar == '/')
         {
             while (currentChar != '\n' && currentChar != EOF)
                 readNextChar();
-            return (Token){0}; 
+            return (Token){0};
         }
         if (currentChar == '*')
         {
@@ -244,19 +319,35 @@ static Token readOperatorToken(int c)
         return makeToken(TOK_DIVIDE, NULL);
 
     case '=':
-        if (currentChar == '=') { readNextChar(); return makeToken(TOK_EQUAL, NULL); }
+        if (currentChar == '=')
+        {
+            readNextChar();
+            return makeToken(TOK_EQUAL, NULL);
+        }
         return makeToken(TOK_ASSIGN, NULL);
 
     case '!':
-        if (currentChar == '=') { readNextChar(); return makeToken(TOK_NOT_EQUAL, NULL); }
+        if (currentChar == '=')
+        {
+            readNextChar();
+            return makeToken(TOK_NOT_EQUAL, NULL);
+        }
         return makeToken(TOK_ERROR, "Unexpected !");
 
     case '<':
-        if (currentChar == '=') { readNextChar(); return makeToken(TOK_LESS_EQUAL, NULL); }
+        if (currentChar == '=')
+        {
+            readNextChar();
+            return makeToken(TOK_LESS_EQUAL, NULL);
+        }
         return makeToken(TOK_LESS, NULL);
 
     case '>':
-        if (currentChar == '=') { readNextChar(); return makeToken(TOK_GREATER_EQUAL, NULL); }
+        if (currentChar == '=')
+        {
+            readNextChar();
+            return makeToken(TOK_GREATER_EQUAL, NULL);
+        }
         return makeToken(TOK_GREATER, NULL);
 
     case '(':
@@ -281,7 +372,7 @@ static Token readOperatorToken(int c)
     }
 }
 
-//   گرفتن توکن 
+//   گرفتن توکن
 
 static Token nextToken()
 {
@@ -303,14 +394,11 @@ static Token nextToken()
     readNextChar();
     Token t = readOperatorToken(c);
 
-    if (t.type == 0)  // یعنی دوباره باید صدا بزنیم
+    if (t.type == 0) // یعنی دوباره باید صدا بزنیم
         return nextToken();
 
     return t;
 }
-
-
-
 
 /* ===================== PARSER ===================== */
 
@@ -342,6 +430,25 @@ void match(TokenType t)
         error("Unexpected token");
 }
 
+void parseProgram()
+{
+    printIndent();
+    printf("Program\n");
+    indent++;
+    parseStmtList();
+    indent--;
+}
+
+void parseStmtList()
+{
+    if (lookahead.type == TOK_IDENTIFIER ||
+        lookahead.type == TOK_IF ||
+        lookahead.type == TOK_LBRACE)
+    {
+        parseStmt();
+        parseStmtList();
+    }
+}
 
 // MAIN
 
