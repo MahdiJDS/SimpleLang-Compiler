@@ -450,6 +450,52 @@ void parseStmtList()
     }
 }
 
+void parseStmt()
+{
+    if (lookahead.type == TOK_IDENTIFIER)
+    {
+        printIndent();
+        printf("Assignment\n");
+        indent++;
+        match(TOK_IDENTIFIER);
+        match(TOK_ASSIGN);
+        parseExpr();
+        match(TOK_SEMICOLON);
+        indent--;
+    }
+    else if (lookahead.type == TOK_IF)
+    {
+        printIndent();
+        printf("IfStmt\n");
+        indent++;
+        match(TOK_IF);
+        match(TOK_LPAREN);
+        parseExpr();
+        match(TOK_RPAREN);
+        parseStmt();
+        if (lookahead.type == TOK_ELSE)
+        {
+            match(TOK_ELSE);
+            parseStmt();
+        }
+        indent--;
+    }
+    else if (lookahead.type == TOK_LBRACE)
+    {
+        printIndent();
+        printf("Block\n");
+        indent++;
+        match(TOK_LBRACE);
+        parseStmtList();
+        match(TOK_RBRACE);
+        indent--;
+    }
+    else
+    {
+        error("Invalid statement");
+    }
+}
+
 // MAIN
 
 int main(int argc, char **argv)
