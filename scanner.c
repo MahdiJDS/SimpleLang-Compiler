@@ -309,6 +309,40 @@ static Token nextToken()
     return t;
 }
 
+
+
+
+/* ===================== PARSER ===================== */
+
+static Token lookahead;
+static int indent = 0;
+
+void printIndent()
+{
+    for (int i = 0; i < indent; i++)
+        printf("  ");
+}
+
+void advance()
+{
+    lookahead = nextToken();
+}
+
+void error(const char *msg)
+{
+    printf("Syntax Error (line %d): %s\n", lookahead.line, msg);
+    advance();
+}
+
+void match(TokenType t)
+{
+    if (lookahead.type == t)
+        advance();
+    else
+        error("Unexpected token");
+}
+
+
 // MAIN
 
 int main(int argc, char **argv)
