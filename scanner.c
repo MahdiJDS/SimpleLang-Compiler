@@ -496,6 +496,35 @@ void parseStmt()
     }
 }
 
+void parseExpr()
+{
+    printIndent();
+    printf("Expr\n");
+    indent++;
+    parseTerm();
+    parseExprPrime();
+    indent--;
+}
+
+void parseExprPrime()
+{
+    if (lookahead.type == TOK_PLUS || lookahead.type == TOK_MINUS)
+    {
+        printIndent();
+        printf("Expr'\n");
+        indent++;
+
+        printIndent();
+        printf("%s\n", lookahead.type == TOK_PLUS ? "+" : "-");
+        match(lookahead.type);
+
+        parseTerm();
+        parseExprPrime();
+
+        indent--;
+    }
+}
+
 // MAIN
 
 int main(int argc, char **argv)
