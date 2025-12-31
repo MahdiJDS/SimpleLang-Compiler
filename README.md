@@ -1,221 +1,327 @@
-# SimpleLang Lexer / Scanner  
-*A minimal lexical analyzer written in C for the SimpleLang educational language.*
+# SimpleLang Compiler (Lexer + Parser)
+
+*A minimal educational compiler written in C for the **SimpleLang** language.*
 
 ---
 
 ## 📌 Overview
-This project implements a **lexer (scanner)** for a simplified programming language called **SimpleLang**, commonly used in compiler design courses.  
-The lexer reads a source file, breaks it into tokens, handles errors, removes comments, and writes the final token stream into an output file.
+
+This project implements a **mini compiler** for a simplified programming language called **SimpleLang**, commonly used in **compiler design courses**.
+
+The project has evolved from a **standalone lexer (scanner)** into a **multi-phase compiler**, and is designed to be **clean, readable, and extensible**.
+
+The compiler currently supports:
+
+* **Lexical Analysis (Lexer / Scanner)** ✅
+* **Syntax Analysis (Parser)** ✅
+
+And is structured to be extended into:
+
+* Semantic analysis
+* AST processing
+* Interpretation or code generation
 
 This project is ideal for:
-- Compiler design assignments  
-- Teaching lexical analysis  
-- Extending into a full compiler pipeline (parser → AST → interpreter)
+
+* Compiler design assignments
+* Deep learning of lexer & parser interaction
+* Building a full compiler pipeline step by step
+
+---
+
+## 🧠 Compiler Architecture
+
+```
+Source Code (.sl)
+        ↓
+      Lexer
+        ↓
+   Token Stream
+        ↓
+      Parser
+        ↓
+   Syntax Validation / AST
+```
 
 ---
 
 ## 🚀 Features
-- Fully written in **ANSI C / C99**
-- Supports:
-  - Keywords: `if`, `else`, `while`, `return`
-  - Identifiers (`[A-Za-z_][A-Za-z0-9_]*`)
-  - Integers (`[0-9]+`)
-  - String literals with escape support (`\"`, `\\`)
-- Multi-character operators:
-  - `==`, `!=`, `<=`, `>=`
-- Single-character operators:
-  - `+`, `-`, `*`, `/`
-- Separators:
-  - `(` `)` `{` `}` `,` `;`
-- Comment handling:
-  - Single-line: `// comment`
-  - Multi-line: `/* comment */`
-- Error detection for:
-  - Unclosed strings
-  - Unclosed block comments
-  - Illegal characters
-- Generates a clean token output file.
+
+### 🔹 General
+
+* Fully written in **ANSI C / C99**
+* Clear phase separation (lexer / parser)
+* Line-based error reporting
+* Educational, readable implementation
+
+---
+
+### 🔹 Lexer (Scanner)
+
+The lexer reads the source file character-by-character and converts it into a stream of tokens.
+
+#### Supported Tokens
+
+**Keywords**
+
+* `if`
+* `else`
+* `while`
+* `return`
+
+**Identifiers**
+
+```
+[A-Za-z_][A-Za-z0-9_]*
+```
+
+**Numbers**
+
+```
+[0-9]+
+```
+
+**String Literals**
+
+```
+"([^"\\]|\\.)*"
+```
+
+* No newline allowed inside strings
+* Supported escapes: `\"` , `\\`
+
+**Operators**
+
+| Category   | Tokens                 |
+| ---------- | ---------------------- |
+| Arithmetic | `+  -  *  /`           |
+| Assignment | `=`                    |
+| Comparison | `==  !=  <=  >=  <  >` |
+
+**Separators**
+
+```
+( ) { } , ;
+```
+
+---
+
+### 🔹 Comment Handling
+
+**Single-line comments**
+
+```c
+// comment
+```
+
+**Multi-line comments**
+
+```c
+/* comment */
+```
+
+* Nested comments are not allowed
+* Unclosed block comments are detected as errors
+
+---
+
+### 🔹 Error Handling (Lexer)
+
+The lexer reports:
+
+* Unclosed string literals
+* Newline inside string literal
+* Unclosed block comments
+* Unknown / illegal characters
+
+**Error format**
+
+```
+ERROR(<message>) line <number>
+```
+
+---
+
+### 🔹 Parser
+
+The parser consumes tokens produced by the lexer and validates them against the **SimpleLang grammar**.
+
+#### Parser Responsibilities
+
+* Validates statement structure
+* Ensures correct token order
+* Detects syntax errors early
+* Prepares the project for AST generation
+
+#### Supported Constructs
+
+* Variable assignments
+* Arithmetic expressions
+* `if / else` statements
+* `while` loops
+* `return` statements
+* Block scopes `{ ... }`
+
+The parser follows a **top-down / recursive-descent** design.
+
+---
+
+### 🔹 Error Handling (Parser)
+
+The parser reports:
+
+* Unexpected tokens
+* Missing symbols (`;`, `)`, `}` , etc.)
+* Invalid statement forms
+
+**Error format**
+
+```
+SYNTAX_ERROR(<message>) line <number>
+```
 
 ---
 
 ## 📘 Project Phases
 
-### Phase 1 — Lexer ✔️ (Completed)
-- Tokenization
-- Comment handling
-- String validation
-- Output token stream
+### Phase 1 — Lexer ✅ (Completed)
 
-### Phase 2 — Parser / AST ⏳ (Coming Soon)
-- Grammar definition
-- AST generation
-- Syntax validation
+* Tokenization
+* Comment removal
+* String validation
+* Token stream generation
 
-### Phase 3 — Semantic Analysis / Code Generation ⏳ (Planned)
-- Symbol tables
-- Scope & type checking
-- Intermediate representation (IR)
-- Optional: code generation backend
+### Phase 2 — Parser ✅ (Completed)
+
+* Grammar definition
+* Recursive-descent parsing
+* Syntax validation
+
+
 
 ---
 
 ## 🔧 Build Instructions
 
 ### Linux & macOS
-```bash
-gcc -std=c99 scanner.c -o scanner
-./scanner test/test1.sl
 
+```bash
+gcc -std=c99 lexer.c parser.c main.c -o simplelang
+./simplelang test/test1.sl
 ```
 
 ### Windows (MinGW / w64devkit)
+
 ```bash
-gcc -std=c99 scanner.c -o scanner.exe
-scanner.exe test\test1.sl
+gcc -std=c99 lexer.c parser.c main.c -o simplelang.exe
+simplelang.exe test\test1.sl
+```
+
+---
+
+## 🧪 Example
+
+### Input (`test1.sl`)
+
+```c
+if (a)
+    if (b)
+        x = 1;
+    else
+        x = 2;
+
+```
+
+### Output (Lexer Tokens)
+
+```
+IF
+LPAREN
+IDENTIFIER(a)
+RPAREN
+IF
+LPAREN
+IDENTIFIER(b)
+RPAREN
+IDENTIFIER(x)
+ASSIGN
+NUMBER(1)
+SEMICOLON
+ELSE
+IDENTIFIER(x)
+ASSIGN
+NUMBER(2)
+SEMICOLON
+
+```
+
+### Parser Result
+
+```
+Program
+  IfStmt
+    Expr
+      Term
+        Factor
+          Identifier
+    IfStmt
+      Expr
+        Term
+          Factor
+            Identifier
+      Assignment
+        Expr
+          Term
+            Factor
+              Number
+      Assignment
+        Expr
+          Term
+            Factor
+              Number
 
 ```
 
 ---
 
-## 📤 Output Format
-
-Each token is printed on a new line in the output file.
-
-### Examples:
-
-IF
-WHILE
-IDENTIFIER(x1)
-NUMBER(10)
-STRING(hello)
-PLUS
-ASSIGN
-GEQ
-SEMICOLON
-
-
-### Error example:
-
-ERROR(Unclosed string) line 5
-
-🧪 Example Input / Output
-Input
-while(x1 >= 10) {
-    x1 = x1 - 1;
-    if (x1 == 5) {
-        return;
-    }
-}
-
-### Output
-WHILE
-LPAREN
-IDENTIFIER(x1)
-GEQ
-NUMBER(10)
-RPAREN
-LBRACE
-IDENTIFIER(x1)
-ASSIGN
-IDENTIFIER(x1)
-MINUS
-NUMBER(1)
-SEMICOLON
-IF
-LPAREN
-IDENTIFIER(x1)
-EQ
-NUMBER(5)
-RPAREN
-LBRACE
-RETURN
-SEMICOLON
-RBRACE
-RBRACE
-
----
-
-## 📝 Token Rules
-Identifiers
-[A-Za-z_][A-Za-z0-9_]*
-
-Numbers
-[0-9]+
-
-String Literals
-"([^"\\]|\\.)*"
-
-
-### Rules:
-
-No newline allowed inside quotes
-
-Escape sequences supported: \", \\
-
-Comments
-
-Single-line:
-
-    // comment
-
-
-Multi-line:
-
-    /* comment */
-
-Operators
-Type	Tokens
-Arithmetic	+ - * /
-Assignment	=
-Comparison	== != <= >= < >
-
---- 
-
-## ⚠️ Error Handling
-
-### The lexer reports:
-
-Unclosed string
-
-Unclosed block comment
-
-Unexpected newline inside string
-
-Unknown characters
-
-Error format:
-
-ERROR(<message>) line <number>
-
----
-
-
 ## 🧱 Implementation Summary
 
-Reads input character-by-character using fgetc
+* Character-by-character input using `fgetc`
+* Longest-match strategy for operators
+* Line number tracking for precise errors
+* Lexer and parser separated into modules
+* Clean EOF handling
 
-Skips whitespace and comments
+---
 
-Performs longest-match on multi-character operators
+## 📂 Suggested Project Structure
 
-Tracks line numbers for accurate error reporting
+```
+SimpleLang/
+├── scanner.c
+├── output/
+│   └── ...
+├── test/
+│   └── ...
+└── README.md
+```
 
-Writes tokens into an output text file
-
-Stops cleanly on EOF
-
-
+---
 
 ## 📄 License
 
-You may use this project under the MIT License.
-If you want, I can generate the LICENSE file automatically.
+MIT License
+
+You are free to use, modify, and distribute this project for educational or personal purposes.
 
 ---
 
 ## 👨‍💻 Author
 
-- 📫 mahdijahed56@gamil.com
-- 🐙 [GitHub](https://github.com/MahdiJDS) 
+* **Mahdi Jahed**
+* 📫 [mahdijahed56@gmail.com](mailto:mahdijahed56@gmail.com)
+* 🐙 GitHub: [https://github.com/MahdiJDS](https://github.com/MahdiJDS)
 
 ---
+
+> This project is intentionally designed to grow with you — from lexer, to parser, to a full compiler.
