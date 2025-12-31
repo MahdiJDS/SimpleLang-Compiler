@@ -590,40 +590,37 @@ void parseFactor()
 
 int main(int argc, char **argv)
 {
-    if (argc < 2)
+    FILE *outputFile;
+
+    if (argc < 3)
     {
-        printf("Usage: scanner <file>\n");
+        printf("Usage: compiler <input_file> <output_file>\n");
         return 1;
     }
 
     inputFile = fopen(argv[1], "r");
     if (!inputFile)
     {
-        printf("Cannot open input file.\n");
+        printf("Error: cannot open input file\n");
         return 1;
     }
 
-    outputFile = fopen("output.txt", "w");
+    outputFile = fopen(argv[2], "w");
     if (!outputFile)
     {
-        printf("Cannot open output file.\n");
+        printf("Error: cannot open output file\n");
         fclose(inputFile);
         return 1;
     }
 
+    freopen(argv[2], "w", stdout);
+
     readNextChar();
-
-    while (1)
-    {
-        Token t = nextToken();
-        if (t.type == TOK_FINISHED)
-            break;
-
-        printToken(t);
-    }
-    fprintf(outputFile, "EOF\n");
+    advance();     
+    parseProgram(); 
 
     fclose(inputFile);
     fclose(outputFile);
+
     return 0;
 }
