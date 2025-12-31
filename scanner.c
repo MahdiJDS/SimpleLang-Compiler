@@ -525,6 +525,35 @@ void parseExprPrime()
     }
 }
 
+void parseTerm()
+{
+    printIndent();
+    printf("Term\n");
+    indent++;
+    parseFactor();
+    parseTermPrime();
+    indent--;
+}
+
+void parseTermPrime()
+{
+    if (lookahead.type == TOK_MULTIPLY || lookahead.type == TOK_DIVIDE)
+    {
+        printIndent();
+        printf("Term'\n");
+        indent++;
+
+        printIndent();
+        printf("%s\n", lookahead.type == TOK_MULTIPLY ? "*" : "/");
+        match(lookahead.type);
+
+        parseFactor();
+        parseTermPrime();
+
+        indent--;
+    }
+}
+
 // MAIN
 
 int main(int argc, char **argv)
