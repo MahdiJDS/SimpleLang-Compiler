@@ -482,12 +482,23 @@ void parseStmt()
         match(TOK_LPAREN);
         parseExpr();
         match(TOK_RPAREN);
+
+        printIndent();
+        printf("ThenBranch\n");
+        indent++;
         parseStmt();
+        indent--;
+
         if (lookahead.type == TOK_ELSE)
         {
             match(TOK_ELSE);
+            printIndent();
+            printf("ElseBranch\n");
+            indent++;
             parseStmt();
+            indent--;
         }
+
         indent--;
     }
     else if (lookahead.type == TOK_LBRACE)
