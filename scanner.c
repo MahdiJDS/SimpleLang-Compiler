@@ -554,6 +554,38 @@ void parseTermPrime()
     }
 }
 
+void parseFactor()
+{
+    printIndent();
+    printf("Factor\n");
+    indent++;
+
+    if (lookahead.type == TOK_NUMBER)
+    {
+        printIndent();
+        printf("Number\n");
+        match(TOK_NUMBER);
+    }
+    else if (lookahead.type == TOK_IDENTIFIER)
+    {
+        printIndent();
+        printf("Identifier\n");
+        match(TOK_IDENTIFIER);
+    }
+    else if (lookahead.type == TOK_LPAREN)
+    {
+        match(TOK_LPAREN);
+        parseExpr();
+        match(TOK_RPAREN);
+    }
+    else
+    {
+        error("Invalid factor");
+    }
+
+    indent--;
+}
+
 // MAIN
 
 int main(int argc, char **argv)
