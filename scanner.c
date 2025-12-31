@@ -430,6 +430,16 @@ void match(TokenType t)
         error("Unexpected token");
 }
 
+
+void parseStmtList();
+void parseStmt();
+void parseExpr();
+void parseExprPrime();
+void parseTerm();
+void parseTermPrime();
+void parseFactor();
+
+
 void parseProgram()
 {
     printIndent();
